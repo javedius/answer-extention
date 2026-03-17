@@ -1,54 +1,58 @@
-# Study Content Analyzer (Chrome Extension, MV3)
+# Анализатор учебного контента (Chrome Extension, MV3)
 
-Learning assistant extension that analyzes page content and detects likely question blocks and answer controls.
+Расширение-помощник для обучения, которое анализирует содержимое страницы и пытается определить блоки с вопросами и элементы управления ответами.
 
-## Features in MVP
+## Возможности MVP
 
-- Floating draggable overlay on top of any page.
-- Manual analysis via:
-  - extension icon click,
-  - `Alt+Shift+A` to toggle panel,
-  - `Alt+Shift+S` to trigger analysis.
-- Detects common answer controls:
-  - radio / checkbox / text input,
-  - select with options,
-  - textarea.
-- Extracts hints from:
-  - image `alt`/`title`,
-  - SVG `text`/`title`/`desc`.
+- Плавающая перетаскиваемая панель поверх любой страницы.
+- Ручной запуск действий через:
+  - клик по иконке расширения,
+  - `Alt+Shift+E` для запуска выделения области экрана,
+  - `Alt+Shift+S` для ручного запуска анализа.
+- Обнаружение распространённых элементов ответа:
+  - `radio` / `checkbox` / текстовое поле ввода,
+  - `select` со списком вариантов,
+  - `textarea`.
+- Извлечение подсказок из:
+  - `alt`/`title` у изображений,
+  - `text`/`title`/`desc` у SVG.
 
-## Project structure
+## Структура проекта
 
-- `manifest.json` - extension configuration.
-- `src/background.js` - command and action handlers.
-- `src/content.js` - page analysis and overlay UI.
+- `manifest.json` - конфигурация расширения.
+- `src/background.js` - обработчики команд, клика по иконке и запросов к LM Studio.
+- `src/content.js` - анализ страницы, интерфейс панели, сбор контекста и выделение области.
 
-## Run locally
+## Локальный запуск
 
-1. Open Chrome and go to `chrome://extensions`.
-2. Enable **Developer mode**.
-3. Click **Load unpacked**.
-4. Select this folder: `gg-ex`.
-5. Open any page with form controls and press `Alt+Shift+A`.
+1. Откройте Chrome и перейдите на `chrome://extensions`.
+2. Включите **Developer mode**.
+3. Нажмите **Load unpacked**.
+4. Выберите эту папку: `gg-ex`.
+5. Откройте страницу с формами или учебным заданием.
+6. Нажмите на иконку расширения, чтобы открыть панель.
+7. При необходимости используйте:
+   - `Alt+Shift+E` для выбора области экрана,
+   - `Alt+Shift+S` для запуска анализа текущей страницы.
 
-## Important note
+## Важное замечание
 
-This extension is designed for study assistance and content structuring.  
-It does not auto-click, auto-fill, or submit answers.
+Это расширение предназначено для помощи в обучении и структурирования контента.  
+Оно не нажимает кнопки автоматически, не заполняет ответы и не отправляет формы.
 
-## AI with LM Studio
+## ИИ через LM Studio
 
-The extension supports local AI analysis through LM Studio (OpenAI-compatible API).
+Расширение поддерживает локальный ИИ-анализ через LM Studio (OpenAI-совместимый API).
 
-Default connection:
+Подключение по умолчанию:
 
 - Base URL: `http://127.0.0.1:1234/v1`
-- Endpoint used: `/chat/completions`
-- Model:
-  - if `lmStudioModel` is set in storage -> this model is used,
-  - otherwise extension auto-selects first loaded model from `/models`.
+- Используемый endpoint: `/chat/completions`
+- Модель:
+  - если в хранилище задан `lmStudioModel`, используется он,
+  - иначе расширение автоматически выбирает первую загруженную модель из `/models`.
 
-To set custom settings in Chrome DevTools console:
+Чтобы задать свои настройки в консоли Chrome DevTools:
 
 ```js
 chrome.storage.local.set({
@@ -58,16 +62,17 @@ chrome.storage.local.set({
 });
 ```
 
-Usage:
+Использование:
 
-1. Start LM Studio local server and load at least one model.
-2. Reload extension in `chrome://extensions`.
-3. Open page and toggle panel (`Alt+Shift+A`).
-4. Click **Collect**.
-5. Click **AI Parse** to let LLM detect question/options from raw page context.
+1. Запустите локальный сервер LM Studio и загрузите хотя бы одну модель.
+2. Перезагрузите расширение в `chrome://extensions`.
+3. Откройте нужную страницу и откройте панель расширения.
+4. При необходимости выделите область через `Alt+Shift+E`.
+5. Нажмите **Collect**, чтобы собрать контекст страницы.
+6. Нажмите **AI Parse**, чтобы передать собранный контекст в LLM и получить предполагаемые вопрос и ответ.
 
-## Next steps
+## Что дальше
 
-- Add optional OCR (`tesseract.js`) for image-only tasks.
-- Add per-site selectors configuration in `chrome.storage`.
-- Add export to JSON for collected question blocks.
+- Добавить опциональный OCR (`tesseract.js`) для заданий, где содержимое находится только на изображении.
+- Добавить настройку селекторов для конкретных сайтов через `chrome.storage`.
+- Добавить экспорт собранных блоков вопросов в JSON.
