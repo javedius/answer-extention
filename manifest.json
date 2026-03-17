@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Анализатор учебного контента",
+  "version": "0.1.0",
+  "description": "Анализирует вопросы на странице и элементы ответов для помощи в обучении.",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_title": "Показать или скрыть панель анализатора"
+  },
+  "commands": {
+    "toggle-overlay": {
+      "suggested_key": {
+        "default": "Alt+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Запустить выделение области"
+    },
+    "run-analysis": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "Запустить анализ вручную"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
